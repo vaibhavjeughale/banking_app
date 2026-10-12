@@ -1,0 +1,161 @@
+<div class="app-layout">
+  <!-- Desktop / Mobile Sidebar Navigation -->
+  <aside class="sidebar" [class.open]="isSidebarOpen()">
+    <div class="sidebar-header">
+      <div class="logo-box">NB</div>
+      <div class="brand-text">
+        <span class="brand-name">NexaBank</span>
+        <span class="brand-badge">ENTERPRISE</span>
+      </div>
+      <button class="mobile-close-btn" (click)="toggleSidebar()">✕</button>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section-title">Core Banking</div>
+
+      <a routerLink="/dashboard" routerLinkActive="active" class="nav-item" (click)="isSidebarOpen.set(false)">
+        <span class="nav-icon">📊</span>
+        <span>Dashboard</span>
+      </a>
+
+      <a routerLink="/accounts" routerLinkActive="active" class="nav-item" (click)="isSidebarOpen.set(false)">
+        <span class="nav-icon">💳</span>
+        <span>Accounts & Cards</span>
+      </a>
+
+      <a routerLink="/transfers" routerLinkActive="active" class="nav-item" (click)="isSidebarOpen.set(false)">
+        <span class="nav-icon">🔄</span>
+        <span>Money Transfers</span>
+      </a>
+
+      <a routerLink="/beneficiaries" routerLinkActive="active" class="nav-item" (click)="isSidebarOpen.set(false)">
+        <span class="nav-icon">👥</span>
+        <span>Beneficiaries</span>
+      </a>
+
+      <a routerLink="/transactions" routerLinkActive="active" class="nav-item" (click)="isSidebarOpen.set(false)">
+        <span class="nav-icon">📜</span>
+        <span>Transaction Ledger</span>
+      </a>
+
+      <a routerLink="/ai-assistant" routerLinkActive="active" class="nav-item ai-nav" (click)="isSidebarOpen.set(false)">
+        <span class="nav-icon">🤖</span>
+        <span>GenAI Assistant</span>
+        <span class="gemini-pill">FLASH</span>
+      </a>
+
+      <a routerLink="/admin" routerLinkActive="active" class="nav-item" (click)="isSidebarOpen.set(false)">
+        <span class="nav-icon">🛡️</span>
+        <span>Operations & Admin</span>
+        <span class="staff-badge">STAFF</span>
+      </a>
+    </nav>
+
+    <!-- Sidebar Bottom Liquidity Card -->
+    <div class="sidebar-footer">
+      <div class="balance-card">
+        <div class="balance-label">Total Available Balance</div>
+        <div class="balance-value">{{ bankingService.formattedAvailableBalance() }}</div>
+        <div class="balance-meta">
+          <span>Clearing Rail</span>
+          <span class="clearing-tag">FedNow Active</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main View Shell -->
+  <div class="main-shell">
+    <!-- Top Header -->
+    <header class="app-header">
+      <div class="header-left">
+        <button class="menu-toggle-btn" (click)="toggleSidebar()">☰</button>
+        <div class="page-title">
+          <span class="title-bold">NexaBank</span>
+          <span class="title-accent">AI Core (Angular 20)</span>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <!-- Live SSE Status -->
+        <div class="live-sync-indicator">
+          <span class="live-dot"></span>
+          <span>LIVE SYNC</span>
+        </div>
+
+        <!-- Role Persona Selector -->
+        <div class="dropdown-wrapper">
+          <button class="persona-btn" (click)="showPersonaMenu.update(v => !v); showNotifications.set(false)">
+            <span>🛡️</span>
+            <span class="role-text">{{ bankingService.currentUser()?.roles?.[0] || 'CUSTOMER' }}</span>
+            <span class="switch-pill">Switch</span>
+          </button>
+
+          @if (showPersonaMenu()) {
+            <div class="persona-dropdown">
+              <div class="dropdown-header">
+                <strong>RBAC Persona Switcher</strong>
+                <p>Simulate staff & customer permissions</p>
+              </div>
+              <div class="persona-list">
+                @for (p of personas; track p.role) {
+                  <button class="persona-item" (click)="selectPersona(p.role)">
+                    <div>
+                      <div class="persona-name">{{ p.name }}</div>
+                      <div class="persona-desc">{{ p.desc }}</div>
+                    </div>
+                  </button>
+                }
+              </div>
+            </div>
+          }
+        </div>
+
+        <!-- Notifications Bell -->
+        <div class="dropdown-wrapper">
+          <button class="icon-btn" (click)="showNotifications.update(v => !v); showPersonaMenu.set(false)">
+            <span>🔔</span>
+            @if (bankingService.unreadNotificationCount() > 0) {
+              <span class="notif-badge">{{ bankingService.unreadNotificationCount() }}</span>
+            }
+          </button>
+
+          @if (showNotifications()) {
+            <div class="notifications-dropdown">
+              <div class="dropdown-header">
+                <strong>Notifications</strong>
+              </div>
+              <div class="notif-list">
+                @for (n of bankingService.notifications(); track n.id) {
+                  <div class="notif-item" (click)="markNotificationRead(n.id)">
+                    <div class="notif-title">{{ n.title }}</div>
+                    <div class="notif-msg">{{ n.message }}</div>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+        </div>
+
+        <!-- Dark Mode Toggle -->
+        <button class="icon-btn" (click)="toggleDarkMode()">
+          {{ isDarkMode() ? '☀️' : '🌙' }}
+        </button>
+
+        <!-- User Profile Pill -->
+        <div class="user-pill">
+          <div class="avatar-circle">AM</div>
+          <div class="user-meta">
+            <span class="user-name">{{ bankingService.currentUser()?.name || 'Alex Morgan' }}</span>
+            <span class="user-role">{{ bankingService.currentUser()?.roles?.[0] || 'CUSTOMER' }}</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Routed Page Component -->
+    <main class="page-container">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

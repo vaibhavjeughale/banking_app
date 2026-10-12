@@ -1,0 +1,330 @@
+/* Transfers Component Styles */
+.transfers-container {
+  max-width: 680px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.page-header h2 {
+  margin: 0;
+  font-size: 1.375rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+
+.page-header p {
+  margin: 0.25rem 0 0;
+  font-size: 0.8125rem;
+  color: #64748b;
+}
+
+.alert-box {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #991b1b;
+  padding: 0.875rem 1rem;
+  border-radius: 12px;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-size: 0.75rem;
+}
+
+.alert-icon {
+  font-size: 1rem;
+}
+
+.alert-box strong {
+  display: block;
+  font-weight: 700;
+}
+
+.alert-box p {
+  margin: 0.25rem 0 0;
+}
+
+.transfer-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.form-group label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+.form-control {
+  padding: 0.625rem 0.875rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 0.8125rem;
+  background: #ffffff;
+  color: #0f172a;
+}
+
+.segmented-control {
+  display: flex;
+  background: #f1f5f9;
+  padding: 0.25rem;
+  border-radius: 8px;
+  gap: 0.25rem;
+}
+
+.segmented-control label {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  padding: 0.5rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.segmented-control input[type="radio"] {
+  display: none;
+}
+
+.segmented-control label:has(input:checked) {
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  font-weight: 700;
+}
+
+.amount-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.currency-symbol {
+  position: absolute;
+  left: 1rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #94a3b8;
+}
+
+.amount-input {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 2.25rem;
+  font-size: 1.5rem;
+  font-weight: 800;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  color: #0f172a;
+}
+
+.preset-buttons {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+.preset-buttons button {
+  padding: 0.25rem 0.625rem;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.preset-buttons button:hover {
+  background: #f1f5f9;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.submit-btn {
+  background: #0d9488;
+  color: #ffffff;
+  border: none;
+  padding: 0.75rem 1.25rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.submit-btn:hover {
+  background: #0f766e;
+}
+
+/* Confirmation Card */
+.confirm-badge {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: #0d9488;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.confirm-hero {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.25rem;
+  text-align: center;
+}
+
+.confirm-sub {
+  font-size: 0.6875rem;
+  color: #64748b;
+  text-transform: uppercase;
+}
+
+.confirm-amount {
+  margin: 0.25rem 0 0;
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+.confirm-amount small {
+  font-size: 0.875rem;
+  color: #64748b;
+}
+
+.confirm-fee {
+  margin: 0.25rem 0 0;
+  font-size: 0.6875rem;
+  color: #059669;
+  font-weight: 600;
+}
+
+.confirm-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.summary-row span {
+  color: #64748b;
+}
+
+.summary-row strong.teal {
+  color: #0d9488;
+}
+
+.confirm-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.btn-cancel {
+  flex: 1;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  padding: 0.625rem;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-confirm {
+  flex: 2;
+  background: #0d9488;
+  color: white;
+  border: none;
+  padding: 0.625rem;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* Success Card */
+.success-card {
+  text-align: center;
+  padding: 2.5rem 1.5rem;
+}
+
+.success-icon {
+  width: 56px;
+  height: 56px;
+  background: #dcfce7;
+  color: #15803d;
+  font-size: 1.75rem;
+  font-weight: 800;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.success-card h3 {
+  margin: 1rem 0 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.success-sub {
+  margin: 0.25rem 0 1.25rem;
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+.receipt-box {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1rem;
+  max-width: 360px;
+  margin: 0 auto 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  text-align: left;
+}
+
+.receipt-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.status-badge {
+  background: #dcfce7;
+  color: #15803d;
+  font-size: 0.625rem;
+  padding: 0.125rem 0.375rem;
+  border-radius: 4px;
+  font-weight: 700;
+}
+
+@media (max-width: 640px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}

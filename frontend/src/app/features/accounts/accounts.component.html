@@ -1,0 +1,30 @@
+<div class="accounts-page">
+  <div class="page-header">
+    <div>
+      <h2>Deposit Accounts & Reserves</h2>
+      <p>Custody portfolios under NexaBank AI Global Core</p>
+    </div>
+    <a routerLink="/transfers" class="btn btn-primary">Move Funds</a>
+  </div>
+
+  <div class="accounts-grid">
+    @for (acc of bankingService.accounts(); track acc.id) {
+      <div class="acc-card">
+        <div class="acc-badge">{{ acc.accountType }} {{ acc.accountType === 'SAVINGS' ? '· 4.75% APY' : '' }}</div>
+        <h3>{{ acc.nickname || acc.accountType }}</h3>
+        <p class="acc-masked">{{ acc.maskedAccountNumber }} · ABA 021000021</p>
+
+        <div class="acc-balances">
+          <div>
+            <span>Available Balance</span>
+            <strong>{{ formatCents(acc.availableBalanceCents) }}</strong>
+          </div>
+          <div class="text-right">
+            <span>Ledger Balance</span>
+            <p>{{ formatCents(acc.ledgerBalanceCents) }}</p>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</div>

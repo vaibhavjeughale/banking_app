@@ -1,0 +1,89 @@
+<div class="admin-page">
+  <div class="page-header">
+    <div>
+      <h2>Administrative & Compliance Operations</h2>
+      <p>AML surveillance, fraud controls, and customer status governance</p>
+    </div>
+
+    <div class="tab-controls">
+      <button [class.active]="activeTab() === 'overview'" (click)="activeTab.set('overview')">Overview</button>
+      <button [class.active]="activeTab() === 'users'" (click)="activeTab.set('users')">Customers</button>
+      <button [class.active]="activeTab() === 'audit'" (click)="activeTab.set('audit')">Audit Logs</button>
+    </div>
+  </div>
+
+  @if (activeTab() === 'overview' && overview()) {
+    <div class="admin-metrics">
+      <div class="metric-box">
+        <span>Total Custody Deposits</span>
+        <strong>{{ overview()?.metrics?.totalDepositsFormatted }}</strong>
+      </div>
+      <div class="metric-box">
+        <span>Clearing Volume</span>
+        <strong class="teal">{{ overview()?.metrics?.totalVolumeFormatted }}</strong>
+      </div>
+      <div class="metric-box">
+        <span>Active AML Alerts</span>
+        <strong class="amber">{{ overview()?.metrics?.activeAlertsCount }} Flags</strong>
+      </div>
+    </div>
+  }
+
+  @if (activeTab() === 'users') {
+    <div class="table-card">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Customer</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (u of users(); track u.id) {
+            <tr>
+              <td><strong>{{ u.name }}</strong></td>
+              <td><code>{{ u.email }}</code></td>
+              <td>{{ u.roles.join(', ') }}</td>
+              <td>
+                <span class="status-pill" [class.suspended]="u.status === 'SUSPENDED'">{{ u.status }}</span>
+              </td>
+              <td>
+                <button class="status-btn" (click)="toggleUserStatus(u.id, u.status)">
+                  {{ u.status === 'ACTIVE' ? 'Suspend' : 'Activate' }}
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+
+  @if (activeTab() === 'audit') {
+    <div class="table-card">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Timestamp</th>
+            <th>Actor</th>
+            <th>Action</th>
+            <th>Outcome</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (log of auditLogs(); track log.id) {
+            <tr>
+              <td>{{ log.timestamp | date:'shortTime' }}</td>
+              <td><strong>{{ log.actorRole }}</strong> ({{ log.actorEmail }})</td>
+              <td><code>{{ log.action }}</code></td>
+              <td><span class="status-pill">{{ log.status }}</span></td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

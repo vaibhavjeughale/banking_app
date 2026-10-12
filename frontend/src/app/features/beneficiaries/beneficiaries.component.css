@@ -1,0 +1,176 @@
+.beneficiaries-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.page-header h2 {
+  margin: 0;
+  font-size: 1.375rem;
+  font-weight: 700;
+}
+
+.page-header p {
+  margin: 0.25rem 0 0;
+  font-size: 0.8125rem;
+  color: #64748b;
+}
+
+.btn-primary {
+  background: #0d9488;
+  color: #ffffff;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn-secondary {
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.payee-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.25rem;
+}
+
+.payee-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.payee-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.payee-top h3 {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 700;
+}
+
+.payee-status {
+  font-size: 0.625rem;
+  font-weight: 700;
+  background: #fef3c7;
+  color: #b45309;
+  padding: 0.125rem 0.375rem;
+  border-radius: 4px;
+}
+
+.payee-status.verified {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.payee-bank {
+  margin: 0.25rem 0 0;
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+.payee-acc {
+  margin: 0.5rem 0 1rem;
+  font-size: 0.75rem;
+  font-family: monospace;
+}
+
+.payee-footer {
+  margin-top: auto;
+  padding-top: 0.75rem;
+  border-top: 1px solid #f1f5f9;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.payee-action {
+  color: #0d9488;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.delete-btn {
+  background: transparent;
+  border: none;
+  color: #ef4444;
+  font-size: 0.6875rem;
+  cursor: pointer;
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  padding: 1rem;
+}
+
+.modal-box {
+  background: #ffffff;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 420px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.modal-box h3 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.form-group label {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: #475569;
+}
+
+.form-control {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 0.75rem;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}

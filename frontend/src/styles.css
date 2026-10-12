@@ -1,0 +1,22 @@
+/* Global NexaBank AI Banking Styles (Angular 20) */
+@import "tailwindcss";
+
+:root {
+  --primary-navy: #0b192c;
+  --accent-teal: #0d9488;
+  --accent-teal-light: #14b8a6;
+  --surface-white: #ffffff;
+  --bg-slate: #f8fafc;
+  --border-slate: #e2e8f0;
+}
+
+body {
+  margin: 0;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  background-color: var(--bg-slate);
+  color: #0f172a;
+}
+
+code, pre, .font-mono {
+  font-family: 'JetBrains Mono', monospace;
+}

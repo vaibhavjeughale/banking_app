@@ -1,0 +1,67 @@
+<div class="chat-container">
+  <div class="chat-header">
+    <div class="ai-avatar">🤖</div>
+    <div>
+      <h3>NexaBank AI Assistant</h3>
+      <p>Gemini 3.8 Flash Core · Bounded Read-Only Banking Functions</p>
+    </div>
+  </div>
+
+  <div class="disclaimer-bar">
+    <span>🛡️</span>
+    <span>Security Enclosure: The AI assistant has read-only access. It cannot initiate fund transfers.</span>
+  </div>
+
+  <div class="messages-area">
+    @for (msg of aiService.messages(); track msg.id) {
+      <div class="message-wrapper" [class.user]="msg.sender === 'user'">
+        @if (msg.sender === 'assistant') {
+          <div class="bubble-avatar">NB</div>
+        }
+        <div class="message-bubble" [class.user-bubble]="msg.sender === 'user'">
+          @if (msg.toolCalls && msg.toolCalls.length > 0) {
+            <div class="tool-badges">
+              <span>Executed Tools:</span>
+              @for (tc of msg.toolCalls; track tc.name) {
+                <code>{{ tc.name }}()</code>
+              }
+            </div>
+          }
+          <div class="message-content">{{ msg.content }}</div>
+          <span class="message-time">{{ msg.timestamp | date:'shortTime' }}</span>
+        </div>
+      </div>
+    }
+
+    @if (aiService.isLoading()) {
+      <div class="message-wrapper">
+        <div class="bubble-avatar">NB</div>
+        <div class="message-bubble loading-bubble">
+          <span>Analyzing accounts and calculating ledger...</span>
+        </div>
+      </div>
+    }
+  </div>
+
+  <div class="chat-footer">
+    <div class="suggestions-row">
+      @for (s of suggestedPrompts; track s) {
+        <button type="button" class="suggestion-chip" (click)="sendPrompt(s)">
+          {{ s }}
+        </button>
+      }
+    </div>
+
+    <form (ngSubmit)="submitChat()" class="chat-input-form">
+      <input
+        type="text"
+        placeholder="Ask about spending summaries, balances, transactions, or accounting..."
+        [ngModel]="inputMessage()"
+        (ngModelChange)="inputMessage.set($event)"
+        name="inputMsg"
+        class="chat-input"
+      >
+      <button type="submit" [disabled]="aiService.isLoading()" class="send-btn">Send</button>
+    </form>
+  </div>
+</div>

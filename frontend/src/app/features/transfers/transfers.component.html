@@ -1,0 +1,181 @@
+<div class="transfers-container">
+  <div class="page-header">
+    <h2>Instant Money Transfer</h2>
+    <p>Atomic clearing rail with sub-second settlement and double-entry consistency</p>
+  </div>
+
+  @if (errorMessage()) {
+    <div class="alert-box">
+      <span class="alert-icon">⚠️</span>
+      <div>
+        <strong>Transfer Guard Alert</strong>
+        <p>{{ errorMessage() }}</p>
+      </div>
+    </div>
+  }
+
+  <!-- STEP 1: FORM -->
+  @if (step() === 'form') {
+    <form [formGroup]="transferForm" (ngSubmit)="proceedToConfirm()" class="transfer-card">
+      <!-- Source Account Selector -->
+      <div class="form-group">
+        <label>Funding Account</label>
+        <select formControlName="sourceAccountId" class="form-control">
+          @for (acc of bankingService.accounts(); track acc.id) {
+            <option [value]="acc.id">
+              {{ acc.nickname || acc.accountType }} ({{ acc.maskedAccountNumber }}) — Available: ${{ (acc.availableBalanceCents / 100).toFixed(2) }}
+            </option>
+          }
+        </select>
+      </div>
+
+      <!-- Recipient Type -->
+      <div class="form-group">
+        <label>Transfer Destination</label>
+        <div class="segmented-control">
+          <label>
+            <input type="radio" value="beneficiary" formControlName="recipientType">
+            <span>Verified Beneficiary</span>
+          </label>
+          <label>
+            <input type="radio" value="own_account" formControlName="recipientType">
+            <span>My Other Accounts</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Beneficiary Picker -->
+      @if (transferForm.get('recipientType')?.value === 'beneficiary') {
+        <div class="form-group">
+          <label>Select Beneficiary</label>
+          <select formControlName="beneficiaryId" class="form-control">
+            @for (b of bankingService.beneficiaries(); track b.id) {
+              <option [value]="b.id">
+                {{ b.displayName }} ({{ b.bankName }} - {{ b.maskedAccountNumber }})
+              </option>
+            }
+          </select>
+        </div>
+      }
+
+      <!-- Internal Destination Account Picker -->
+      @if (transferForm.get('recipientType')?.value === 'own_account') {
+        <div class="form-group">
+          <label>Destination Account</label>
+          <select formControlName="destinationAccountId" class="form-control">
+            @for (acc of bankingService.accounts(); track acc.id) {
+              <option [value]="acc.id">
+                {{ acc.nickname || acc.accountType }} ({{ acc.maskedAccountNumber }})
+              </option>
+            }
+          </select>
+        </div>
+      }
+
+      <!-- Amount Input & Presets -->
+      <div class="form-group">
+        <label>Transfer Amount (USD)</label>
+        <div class="amount-wrapper">
+          <span class="currency-symbol">$</span>
+          <input type="number" step="0.01" formControlName="amount" class="amount-input">
+        </div>
+
+        <div class="preset-buttons">
+          <button type="button" (click)="setPresetAmount(50)">$50</button>
+          <button type="button" (click)="setPresetAmount(100)">$100</button>
+          <button type="button" (click)="setPresetAmount(250)">$250</button>
+          <button type="button" (click)="setPresetAmount(500)">$500</button>
+          <button type="button" (click)="setPresetAmount(1000)">$1,000</button>
+        </div>
+      </div>
+
+      <!-- Category & Memo -->
+      <div class="form-row">
+        <div class="form-group">
+          <label>Category</label>
+          <select formControlName="category" class="form-control">
+            <option value="Transfers">Transfers</option>
+            <option value="Utilities & Bills">Utilities & Bills</option>
+            <option value="Groceries">Groceries</option>
+            <option value="Dining & Restaurants">Dining & Restaurants</option>
+            <option value="Shopping & Retail">Shopping & Retail</option>
+            <option value="Travel & Transit">Travel & Transit</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Reference Memo</label>
+          <input type="text" formControlName="description" class="form-control" placeholder="e.g. Invoice settlement">
+        </div>
+      </div>
+
+      <button type="submit" class="submit-btn">Review Transfer</button>
+    </form>
+  }
+
+  <!-- STEP 2: CONFIRMATION -->
+  @if (step() === 'confirm') {
+    <div class="transfer-card confirmation-card">
+      <div class="confirm-badge">Step 2 of 2: Security & Settlement Review</div>
+      <div class="confirm-hero">
+        <span class="confirm-sub">Total Debit Amount</span>
+        <h3 class="confirm-amount">${{ transferForm.get('amount')?.value }} <small>USD</small></h3>
+        <p class="confirm-fee">Zero Fees (FedNow High-Velocity Rail)</p>
+      </div>
+
+      <div class="confirm-summary">
+        <div class="summary-row">
+          <span>Source Account:</span>
+          <strong>{{ selectedSourceAccount()?.nickname }} ({{ selectedSourceAccount()?.maskedAccountNumber }})</strong>
+        </div>
+        <div class="summary-row">
+          <span>Category:</span>
+          <strong>{{ transferForm.get('category')?.value }}</strong>
+        </div>
+        <div class="summary-row">
+          <span>Description:</span>
+          <strong>{{ transferForm.get('description')?.value }}</strong>
+        </div>
+        <div class="summary-row">
+          <span>Settlement Rail:</span>
+          <strong class="teal">Instant (Sub-Second Settlement)</strong>
+        </div>
+      </div>
+
+      <div class="confirm-actions">
+        <button type="button" class="btn-cancel" (click)="step.set('form')">Modify</button>
+        <button type="button" class="btn-confirm" [disabled]="isSubmitting()" (click)="executeTransfer()">
+          {{ isSubmitting() ? 'Executing Atomic Commit...' : 'Confirm & Send Money' }}
+        </button>
+      </div>
+    </div>
+  }
+
+  <!-- STEP 3: SUCCESS RECEIPT -->
+  @if (step() === 'success' && completedTransaction()) {
+    <div class="transfer-card success-card">
+      <div class="success-icon">✓</div>
+      <h3>Transfer Committed Successfully!</h3>
+      <p class="success-sub">Funds debited from source ledger and routed instantly.</p>
+
+      <div class="receipt-box">
+        <div class="receipt-row">
+          <span>Reference:</span>
+          <code>{{ completedTransaction()?.transactionReference }}</code>
+        </div>
+        <div class="receipt-row">
+          <span>Amount Sent:</span>
+          <strong>${{ (completedTransaction()!.amountCents / 100).toFixed(2) }} USD</strong>
+        </div>
+        <div class="receipt-row">
+          <span>Status:</span>
+          <span class="status-badge">{{ completedTransaction()?.status }}</span>
+        </div>
+      </div>
+
+      <div class="success-actions">
+        <button type="button" class="submit-btn" (click)="resetForm()">Send Another Wire</button>
+      </div>
+    </div>
+  }
+</div>

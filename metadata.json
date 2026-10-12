@@ -1,0 +1,6 @@
+{
+  "name": "NexaBank AI - Digital Banking & GenAI Financial Assistant",
+  "description": "Enterprise-grade digital banking web application with accounts, atomic simulated transfers, real-time activity stream, analytics, RBAC admin operations, and an intelligent GenAI banking assistant.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

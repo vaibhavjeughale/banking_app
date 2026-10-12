@@ -1,0 +1,128 @@
+<div class="dashboard-page">
+  <!-- Hero Greeting Banner -->
+  <div class="hero-banner">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span>🛡️</span>
+        <span>NexaBank Enterprise Clearing Rail</span>
+      </div>
+      <h2>Welcome back, {{ bankingService.currentUser()?.name || 'Alex Morgan' }}</h2>
+      <p>All custody portfolios synchronized under sub-second FedNow clearing standards.</p>
+    </div>
+
+    <div class="hero-actions">
+      <a routerLink="/transfers" class="btn btn-primary">
+        <span>🔄</span>
+        <span>Send Wire</span>
+      </a>
+      <a routerLink="/ai-assistant" class="btn btn-secondary">
+        <span>🤖</span>
+        <span>Ask AI</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- 4 Core Metric Cards -->
+  <div class="metrics-grid">
+    <div class="metric-card">
+      <div class="metric-header">
+        <span class="metric-title">Total Available Balance</span>
+        <span class="metric-icon">💳</span>
+      </div>
+      <div class="metric-amount">{{ bankingService.formattedAvailableBalance() }}</div>
+      <div class="metric-sub">Immediate funds ready for transfer</div>
+    </div>
+
+    <div class="metric-card">
+      <div class="metric-header">
+        <span class="metric-title">Total Ledger Balance</span>
+        <span class="metric-icon">📜</span>
+      </div>
+      <div class="metric-amount">{{ formatCents(bankingService.totalLedgerBalanceCents()) }}</div>
+      <div class="metric-sub">Posted close-of-business balance</div>
+    </div>
+
+    <div class="metric-card">
+      <div class="metric-header">
+        <span class="metric-title">Monthly Inflow</span>
+        <span class="metric-icon income">📥</span>
+      </div>
+      <div class="metric-amount income">+{{ formatCents(monthlyInflow()) }}</div>
+      <div class="metric-sub">Salary deposits & accrued interest</div>
+    </div>
+
+    <div class="metric-card">
+      <div class="metric-header">
+        <span class="metric-title">Monthly Outflow</span>
+        <span class="metric-icon expense">📤</span>
+      </div>
+      <div class="metric-amount expense">-{{ formatCents(monthlyOutflow()) }}</div>
+      <div class="metric-sub">Direct transfers & debits</div>
+    </div>
+  </div>
+
+  <!-- Accounts & Recent Activity Split Grid -->
+  <div class="split-grid">
+    <!-- Left: Accounts Overview -->
+    <div class="panel">
+      <div class="panel-header">
+        <h3>Deposit Accounts</h3>
+        <span class="panel-meta">{{ bankingService.accounts().length }} linked accounts</span>
+      </div>
+
+      <div class="accounts-list">
+        @for (acc of bankingService.accounts(); track acc.id) {
+          <div class="account-card">
+            <div class="acc-top">
+              <div>
+                <span class="acc-type">{{ acc.accountType }}</span>
+                <h4 class="acc-name">{{ acc.nickname || acc.accountType }}</h4>
+                <p class="acc-num">{{ acc.maskedAccountNumber }}</p>
+              </div>
+              <span class="acc-badge">ACTIVE</span>
+            </div>
+
+            <div class="acc-bottom">
+              <div>
+                <span class="acc-sublabel">Available</span>
+                <div class="acc-balance">{{ formatCents(acc.availableBalanceCents) }}</div>
+              </div>
+              <div class="text-right">
+                <span class="acc-sublabel">Ledger</span>
+                <div class="acc-ledger">{{ formatCents(acc.ledgerBalanceCents) }}</div>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- Right: Recent Transactions -->
+    <div class="panel">
+      <div class="panel-header">
+        <h3>Recent Transactions</h3>
+        <a routerLink="/transactions" class="link-btn">View All →</a>
+      </div>
+
+      <div class="transactions-list">
+        @for (txn of recentTransactions(); track txn.id) {
+          <div class="transaction-row">
+            <div class="txn-info">
+              <span class="txn-icon" [class.is-deposit]="txn.type === 'DEPOSIT' || txn.type === 'INTEREST'">
+                {{ (txn.type === 'DEPOSIT' || txn.type === 'INTEREST') ? '↓' : '↑' }}
+              </span>
+              <div>
+                <div class="txn-desc">{{ txn.description }}</div>
+                <div class="txn-meta">{{ txn.category }} · {{ txn.createdAt | date:'shortDate' }}</div>
+              </div>
+            </div>
+
+            <div class="txn-amount" [class.income]="txn.type === 'DEPOSIT' || txn.type === 'INTEREST'">
+              {{ (txn.type === 'DEPOSIT' || txn.type === 'INTEREST') ? '+' : '-' }}{{ formatCents(txn.amountCents) }}
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>
